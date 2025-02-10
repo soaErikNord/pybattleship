@@ -5,6 +5,7 @@ class Ship():
         self.__length = length
         self.__hits = 0
         self.__ship_name = ship_name
+        self.__ship_letter = ship_letter
 
         
     def hit(self):
@@ -25,6 +26,10 @@ class Ship():
 
     def get_ship_name(self):
         return self.__ship_name
+    
+
+    def get_ship_letter(self):
+        return self.__ship_letter
 
 
     def set_hits(self, hits):
@@ -36,33 +41,36 @@ class Ship():
 
 
     def set_ship_name(self, ship_name):
-        self.__ship_name = ship_name            
+        self.__ship_name = ship_name   
+
+
+    def set_ship_letter(self, ship_letter):
+        self.__ship_letter = ship_letter             
         
 
 class Carrier(Ship):
-    def __init__(self, ship_letter):
-        super().__init__(5, ship_letter)
+    def __init__(self):
+        super().__init__(5, 'C', 'Carrier')
 
 
 class Battleship(Ship):
-    def __init__(self, ship_letter):
-        super().__init__(4, ship_letter)
+    def __init__(self):
+        super().__init__(4, 'B', 'Battleship')
 
 
 class Cruiser(Ship):
-    def __init__(self, ship_letter):
-        super().__init__(3, ship_letter)
+    def __init__(self):
+        super().__init__(3, 'R', 'Cruiser')
 
 
 class Submarine(Ship):
-    def __init__(self, ship_letter):
-        super().__init__(3, ship_letter)
+    def __init__(self):
+        super().__init__(3, 'S', 'Submarine')
 
 
 class Destroyer(Ship):
-    def __init__(self, ship_letter):
-        super().__init__(2, ship_letter) 
-        self.size = 2
+    def __init__(self):
+        super().__init__(2, 'D', 'Destroyer') 
 
 
 
@@ -71,11 +79,15 @@ class Board():
         self.board = [['O' for i in range(10)] for j in range(10)]
         self.ships = []
         
-    def get_ship_locations():
+    def get_ship_locations(self):
         for ship in SHIP_TYPES:
             print(f"Enter the location of {ship}")
-            x = int(input("Enter the x coordinate: "))
-            y = int(input("Enter the y coordinate: "))
+            x = -1
+            y = -1
+            while x < 0 or x > 10:
+                x = int(input("Enter the x coordinate, between 0 - 10: "))
+            while y < 0 or y > 10:
+                y = int(input("Enter the y coordinate, between 0 - 10: "))
             horizontal = input("Is the ship horizontal? (y/n) ")
             if horizontal == 'y':
                 horizontal = True
@@ -109,7 +121,9 @@ class Board():
 
 def main(): 
     board = Board()
+    ships = []
     carrier = Carrier()
+    ships.append(carrier)
     battleship = Battleship()
     cruiser = Cruiser()
     submarine = Submarine()
@@ -123,6 +137,7 @@ def main():
     # board.add_ship(submarine, 3, 0, True)
     # board.add_ship(destroyer, 4, 0, True)
 
+    print(f'')
     print(board)
     print(board.shoot(0, 0))
     print(board.shoot(1, 0))
