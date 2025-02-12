@@ -16,7 +16,7 @@ class Ship():
             return False
         
 
-    def get_hit(self):
+    def get_hits(self):
         return self.__hits
 
 
@@ -79,9 +79,9 @@ class Board():
         self.board = [['O' for i in range(10)] for j in range(10)]
         self.ships = []
         
-    def get_ship_locations(self):
-        for ship in SHIP_TYPES:
-            print(f"Enter the location of {ship}")
+    def get_ship_locations(self, ships):
+        for ship in ships:
+            print(f"Enter the location of {ship.get_ship_name()}")
             x = -1
             y = -1
             while x < 0 or x > 10:
@@ -97,18 +97,21 @@ class Board():
 
     def add_ship(self, ship, x, y, horizontal):
         if horizontal:
-            for i in range(ship.length):
-                self.board[y][x+i] = ship.ship_letter
+            for i in range(ship.get_length()):
+                self.board[y][x+i] = ship.get_ship_letter()
         else:
-            for i in range(ship.length):
-                self.board[y+i][x] = ship.ship_letter
+            for i in range(ship.get_length()):
+                self.board[y+i][x] = ship.get_ship_letter()
         self.ships.append(ship)
+        print()
         
     def shoot(self, x, y):
-        if self.board[y][x] == 'S':
+        if self.board[y][x] != 'O':
             self.board[y][x] = 'X'
             for ship in self.ships:
-                if ship.hit():
+                if ship.hits():
+                    if ship.get_hits() == ship.get_length():
+                        print(f'{ship.get_ship_name()} has been sunk!')
                     return True
             return False
         else:
@@ -121,15 +124,20 @@ class Board():
 
 def main(): 
     board = Board()
+    
     ships = []
     carrier = Carrier()
     ships.append(carrier)
     battleship = Battleship()
+    ships.append(battleship)
     cruiser = Cruiser()
+    ships.append(cruiser)
     submarine = Submarine()
+    ships.append(submarine)
     destroyer = Destroyer()
+    ships.append(destroyer)
 
-    board.get_ship_locations()
+    board.get_ship_locations(ships)
 
     # board.add_ship(carrier, 0, 0, True)
     # board.add_ship(battleship, 1, 0, True)
@@ -140,15 +148,21 @@ def main():
     print(f'')
     print(board)
     print(board.shoot(0, 0))
-    print(board.shoot(1, 0))
-    print(board.shoot(2, 0))
-    print(board.shoot(3, 0))
-    print(board.shoot(4, 0))
-    print(board.shoot(5, 0))
-    print(board.shoot(6, 0))
-    print(board.shoot(7, 0))
-    print(board.shoot(8, 0))
-    print(board.shoot(9, 0))
+    print(board.shoot(1, 1))
+    print(board.shoot(2, 1))
+    print(board.shoot(3, 3))
+    print(board.shoot(4, 4))
+    print(board.shoot(5, 5))
+    print(board.shoot(6, 6))
+    print(board.shoot(7, 7))
+    print(board.shoot(8, 8))
+    print(board.shoot(9, 9))
+    print(board)
+
+    print(board.shoot(2, 3))
+    print(board.shoot(3, 3))
+    print(board.shoot(4, 3))
+    print(board.shoot(5, 3))
     print(board)
 
 
