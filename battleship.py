@@ -103,21 +103,40 @@ class Board():
             for i in range(ship.get_length()):
                 self.board[y+i][x] = ship.get_ship_letter()
         self.ships.append(ship)
-        print()
+        # print()
         
     def shoot(self, x, y):
         if self.board[y][x] != 'O':
-            self.board[y][x] = 'X'
-            for ship in self.ships:
-                if ship.hits():
+            
+            for ship in self.ships:  
+                if ship.get_ship_letter() == self.board[y][x] and ship.hit():
                     if ship.get_hits() == ship.get_length():
                         print(f'{ship.get_ship_name()} has been sunk!')
+                    
+                    if not self.__check_board():
+                        print('You have sunk all the ships!')
+                        exit()
+                    
+                    self.board[y][x] = 'X'
                     return True
+                    
+            self.board[y][x] = 'X'
             return False
         else:
             self.board[y][x] = 'M'
             return False
 
+    def __check_board(self):
+        __ship_exists = False
+        for row in self.board:
+            for cell in row:
+                for ship in self.ships:
+                    if cell == ship.get_ship_letter():
+                        __ship_exists = True
+                        break
+                
+        return __ship_exists 
+    
     def __str__(self):
         return '\n'.join([' '.join(row) for row in self.board])      
 
